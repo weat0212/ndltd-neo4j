@@ -1,0 +1,1 @@
+LOAD CSV WITH HEADERS FROM 'file:///employees.csv' AS row
