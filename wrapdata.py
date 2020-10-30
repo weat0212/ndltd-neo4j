@@ -1,23 +1,33 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from selenium import webdriver
+# from selenium import webdriver
 from time import sleep
 import pandas as pd
+
+# solution to the error message
+# selenium.common.exceptions.SessionNotCreatedException: Message: session not created: This version of ChromeDriver only supports Chrome version 81
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 # 收集論文清單
 df = []
-driver = webdriver.Chrome()
+# driver = webdriver.Chrome()
+driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.get('https://ndltd.ncl.edu.tw/')
 driver.find_element_by_xpath('//a[@title="指令查詢"]').click()
-driver.find_element_by_id('ysearchinput0').send_keys('"博士".ty and ("社會服務學門" or "社會及行為科學學門").sglv1')
+driver.find_element_by_id('ysearchinput0').send_keys('sc="國立中正大學" and "資訊管理系".sdp and "吳帆".ad')
 driver.find_element_by_id('gs32search').click()
 cookie = re.findall(r'ccd=(.*?)/', driver.current_url)[0]
 
+# Find the amount papers of MIS CCU
+num = driver.find_element_by_xpath('//*[@id="bodyid"]/form/div/table/tbody/tr[1]/td[2]/table/tbody/tr[4]/td/div[1]/table/tbody/tr[2]/td/table[2]/tbody/tr[2]/td[2]/span[2]').text
+amount = int(num.strip())
+print("一共有：", amount, "筆資料")
 
 i = 1
-while i <= 4205:
+while i <= amount:
     try:
         print('='*80)
         print('Dealing with ', str(i),'...')
@@ -236,13 +246,30 @@ while i <= 4205:
     except:
         driver.close()
         sleep(2)
-        driver = webdriver.Chrome()
+        # driver = webdriver.Chrome()
+        driver = webdriver.Chrome(ChromeDriverManager().install())
         sleep(1)
         driver.get('https://ndltd.ncl.edu.tw/')
         sleep(5)
         driver.find_element_by_xpath('//a[@title="指令查詢"]').click()
         sleep(1)
-        driver.find_element_by_id('ysearchinput0').send_keys('"博士".ty and ("社會服務學門" or "社會及行為科學學門").sglv1')
+        driver.find_element_by_id('ysearchinput0').send_keys('sc="國立中正大學" and "資訊管理系".sdp and "吳帆".ad')
         driver.find_element_by_id('gs32search').click()
         sleep(3)
         cookie = re.findall(r'ccd=(.*?)/', driver.current_url)[0]
+
+
+# Export Part
+pd.concat(df, ignore_index=True).to_excel('./dataset/MISCCU.xlsx')
+pd.concat(df, ignore_index=True).to_pickle('./dataset/MISCCU.pickle')
+
+# distinct by 學門校系
+df2 = pd.concat(df, ignore_index=True)
+df2.info()
+
+
+tmp = df2.groupby(['校院名稱','系所名稱','學類','學門']).size().reset_index()
+tmp.columns = ['學類', '學門', '校院名稱', '系所名稱', '則數']
+tmp.to_excel('校系學門學類.xlsx')
+
+driver.close
