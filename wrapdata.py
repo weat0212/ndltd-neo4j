@@ -215,32 +215,60 @@ while i <= amount:
         # 引用
         info23 = str(soup.find('div',{'style':'padding:10px;text-align:left;'}))
     #     print('引用：', info23)
-        ndf = pd.DataFrame([{'研究生:':info1,
-                             '研究生_外文':info2,
-                             '論文名稱':info3,
-                             '論文名稱_外文:':info4,
-                             '指導教授':info5,
-                             '指導教授_外文':info6,
-                             '口試委員':info24,
-                             '口試委員_外文':info25,                         
-                             '學位類別':info7,
-                             '校院名稱':info8,
-                             '系所名稱':info9,
-                             '學門':info10,
-                             '學類':info11,
-                             '論文出版年':info12,
-                             '畢業學年度':info13,
-                             '語文別':info14,
-                             '論文頁數':info15,
-                             '中文關鍵詞':info16,
-                             '外文關鍵詞':info17,
-                             '相關次數':info18,
-                             '點閱':info19,
-                             '下載':info20,
-                             '書目收藏':info21,
-                             '摘要':info22,
-                             '引用':info23,
-                             '連結網址':url}])
+
+        # 中文版
+        # ndf = pd.DataFrame([{'研究生':info1,
+        #                      '研究生_外文':info2,
+        #                      '論文名稱':info3,
+        #                      '論文名稱_外文:':info4,
+        #                      '指導教授':info5,
+        #                      '指導教授_外文':info6,
+        #                      '口試委員':info24,
+        #                      '口試委員_外文':info25,                         
+        #                      '學位類別':info7,
+        #                      '校院名稱':info8,
+        #                      '系所名稱':info9,
+        #                      '學門':info10,
+        #                      '學類':info11,
+        #                      '論文出版年':info12,
+        #                      '畢業學年度':info13,
+        #                      '語文別':info14,
+        #                      '論文頁數':info15,
+        #                      '中文關鍵詞':info16,
+        #                      '外文關鍵詞':info17,
+        #                      '相關次數':info18,
+        #                      '點閱':info19,
+        #                      '下載':info20,
+        #                      '書目收藏':info21,
+        #                      '摘要':info22,
+        #                      '引用':info23,
+        #                      '連結網址':url}])
+        ndf = pd.DataFrame([{'Author':info1,
+                             'Author_Eng':info2,
+                             'Title':info3,
+                             'Title_Eng':info4,
+                             'Advisor':info5,
+                             'Advisor_Eng':info6,
+                             'Oral_Defense_Committee':info24,
+                             'Oral_Defense_Committee_Eng':info25,                         
+                             'degree':info7,
+                             'Institution':info8,
+                             'Department':info9,
+                             'Narrow_Field':info10,
+                             'Detailed_Field':info11,
+                             'Publication_Year':info12,
+                             'Graduated_Academic_Year':info13,
+                             'language':info14,
+                             'number_of_pages':info15,
+                             'keyword_chi':info16,
+                             'keyword_eng':info17,
+                            #  '相關次數':info18,
+                             'Hits':info19,
+                             'Download':info20,
+                             'Fav':info21,
+                             'Abstract':info22,
+                             'Cited':info23,
+                             'Thesis_URL':url}])
         df.append(ndf)
         i += 1
     except:
@@ -261,15 +289,16 @@ while i <= amount:
 
 # Export Part
 pd.concat(df, ignore_index=True).to_excel('./dataset/MISCCU.xlsx')
+# pd.concat(df, ignore_index=True).to_csv('./dataset/MISCCU.csv', encoding='utf-8')
 pd.concat(df, ignore_index=True).to_pickle('./dataset/MISCCU.pickle')
 
 # distinct by 學門校系
-df2 = pd.concat(df, ignore_index=True)
-df2.info()
+# df2 = pd.concat(df, ignore_index=True)
+# df2.info()
 
 
-tmp = df2.groupby(['校院名稱','系所名稱','學類','學門']).size().reset_index()
-tmp.columns = ['學類', '學門', '校院名稱', '系所名稱', '則數']
-tmp.to_excel('校系學門學類.xlsx')
+# tmp = df2.groupby(['校院名稱','系所名稱','學類','學門']).size().reset_index()
+# tmp.columns = ['學類', '學門', '校院名稱', '系所名稱', '則數']
+# tmp.to_excel('校系學門學類.xlsx')
 
 driver.close

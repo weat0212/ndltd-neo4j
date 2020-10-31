@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="NDLTD-Neo4j" />
+        <module name="python" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="NDLTD-Neo4j" target="1.5" />
+      <module name="python" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
