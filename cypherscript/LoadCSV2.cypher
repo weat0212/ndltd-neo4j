@@ -7,6 +7,10 @@ MERGE (author:Author{author_name:row.Author, author_eng_Name:row.Author_Eng, deg
      number_of_pages:row.number_of_pages, keyword_chi:row.keyword_chi, hits:row.Hits,
      download:row.Download, fav:row.Fav, thesis_URL:row.Thesis_URL})
 
+
+//******************************************
+//*** TODO: Co-Advisors problem need fix ***
+//******************************************
 // Professor
 MERGE (professor:Professor{professor_name:row.Advisor})
 MERGE (author) <- [:INSTRUCT] - (professor)
