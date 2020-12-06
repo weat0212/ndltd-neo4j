@@ -1,3 +1,5 @@
+package authentication;
+
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
@@ -14,13 +16,15 @@ public class BasicAuth implements AutoCloseable{
     private final Driver driver;
 
     public BasicAuth(String uri){
-        System.out.print("Password:");
+        System.out.print("User:");
         Scanner scn = new Scanner(System.in);
+        String user = scn.nextLine();
+        System.out.print("Password:");
         String password = scn.nextLine();
-        driver = new <Driver>BasicAuth("neo4j://localhost:7687","neo4j", password).getDriver();
+        driver = new <Driver>BasicAuth(uri, user, password).getDriver();
     }
 
-    public BasicAuth(String uri, String user, String password){
+    private BasicAuth(String uri, String user, String password){
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
 
