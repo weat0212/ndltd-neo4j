@@ -1,4 +1,4 @@
-package transaction;
+package crud;
 
 /**
  * @author weat0212@gmail.com
@@ -9,8 +9,6 @@ package transaction;
 
 import authentication.BasicAuth;
 import org.neo4j.driver.*;
-
-import java.util.Scanner;
 
 import static org.neo4j.driver.Values.parameters;
 
